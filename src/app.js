@@ -2,7 +2,13 @@ import path from "path";
 import express from "express";
 import session from "express-session";
 import passport from "passport";
+import prisma from "./lib/prisma.js";
+import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import "dotenv/config";
+
+// A second is 1000 milliseconds
+const ONE_DAY = 1000 * 60 * 60 * 24;
+const TWENTY_MINUTES = 1000 * 60 * 20;
 
 const app = express();
 
@@ -16,6 +22,14 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: new PrismaSessionStore(prisma, {
+      checkPeriod: TWENTY_MINUTES,
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+    }),
+    cookie: {
+      maxAge: ONE_DAY,
+    },
   }),
 );
 app.use(passport.session());
