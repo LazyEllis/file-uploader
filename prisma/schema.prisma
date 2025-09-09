@@ -7,3 +7,47 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id       Int      @id @default(autoincrement())
+  username String   @unique
+  password String
+  files    File[]
+  folders  Folder[]
+
+  @@map("users")
+}
+
+model File {
+  id        Int      @id @default(autoincrement())
+  name      String
+  url       String
+  size      Int
+  owner     User     @relation(fields: [ownerId], references: [id])
+  ownerId   Int      @map("owner_id")
+  folder    Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId  Int?     @map("folder_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("files")
+}
+
+model Folder {
+  id         Int      @id @default(autoincrement())
+  name       String
+  owner      User     @relation(fields: [ownerId], references: [id])
+  ownerId    Int      @map("owner_id")
+  folder     Folder?  @relation("FolderToSubfolder", fields: [folderId], references: [id], onDelete: Cascade)
+  subfolders Folder[] @relation("FolderToSubfolder")
+  folderId   Int?     @map("folder_id")
+  files      File[]
+
+  @@map("folders")
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
