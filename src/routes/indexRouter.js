@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { requireGuest } from "../lib/auth.js";
 import {
   renderSignInForm,
   renderSignUpForm,
@@ -6,8 +7,8 @@ import {
 
 const indexRouter = Router();
 
-indexRouter.get("/sign-up", renderSignUpForm);
+indexRouter.get("/sign-up", requireGuest, renderSignUpForm);
 
-indexRouter.get("/sign-in", renderSignInForm);
+indexRouter.get("/sign-in", requireGuest, renderSignInForm);
 
 export default indexRouter;
