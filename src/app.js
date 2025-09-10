@@ -4,6 +4,7 @@ import session from "express-session";
 import passport from "passport";
 import prisma from "./lib/prisma.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
+import "./lib/passport.js";
 import "dotenv/config";
 
 // A second is 1000 milliseconds
@@ -35,6 +36,11 @@ app.use(
 app.use(passport.session());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(assetsPath));
+
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
