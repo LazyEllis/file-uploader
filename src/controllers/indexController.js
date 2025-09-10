@@ -33,3 +33,13 @@ export const renderSignInForm = (req, res) => {
 
   res.render("auth-form", { mode: "sign-in", errors });
 };
+
+export const signOut = (req, res, next) => {
+  req.logout((error) => {
+    if (error) {
+      return next(error);
+    }
+
+    res.redirect("/sign-in");
+  });
+};

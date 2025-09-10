@@ -1,10 +1,11 @@
 import { Router } from "express";
 import passport from "passport";
-import { requireGuest } from "../lib/auth.js";
+import { requireAuth, requireGuest } from "../lib/auth.js";
 import { validateSignIn, validateSignUp } from "../lib/validators.js";
 import {
   renderSignInForm,
   renderSignUpForm,
+  signOut,
   signUp,
 } from "../controllers/indexController.js";
 
@@ -26,5 +27,7 @@ indexRouter.post(
     failureMessage: true,
   }),
 );
+
+indexRouter.get("/sign-out", requireAuth, signOut);
 
 export default indexRouter;
