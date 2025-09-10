@@ -1,0 +1,49 @@
+<%
+  const action = mode === "sign-up" ? "Sign up" : "Sign in";
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Uploader | <%= action %></title>
+  </head>
+  <body>
+    <main class="auth">
+      <h1><%= action %></h1>
+
+      <div class="form-container">
+        <%- include("partials/errors") %>
+
+        <form action="/<%= mode %>" method="post">
+          <div>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" value="<%= locals.data?.username %>" />
+          </div>
+
+          <div>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" />
+          </div>
+
+          <% if (mode === "sign-up") { %>
+            <div>
+              <label for="confirm-password">Confirm Password</label>
+              <input type="password" name="confirmPassword" id="confirm-password" />
+            </div>
+          <% } %>
+
+          <div>
+            <button type="submit" class="button action"><%= action %></button>
+          </div>
+        </form>
+        
+        <p class="alternate-message">
+          <%= mode === "sign-up" ? "Already have an account?" : "Don't have an account?" %>
+          <a href="/<%= mode === 'sign-up' ? 'sign-in' : 'sign-up' %>"><%= mode === "sign-up" ? "Sign in" : "Sign up" %></a>
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
