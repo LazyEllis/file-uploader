@@ -3,6 +3,7 @@ import { requireAuth } from "../lib/auth.js";
 import { validateFolder } from "../lib/validators.js";
 import {
   createFolder,
+  deleteFolder,
   renderCreateFolderForm,
   renderUpdateFolderForm,
   updateFolder,
@@ -17,5 +18,7 @@ folderRouter.post("/new", requireAuth, validateFolder, createFolder);
 folderRouter.get("/:id/edit", requireAuth, renderUpdateFolderForm);
 
 folderRouter.post("/:id/edit", requireAuth, validateFolder, updateFolder);
+
+folderRouter.post("/:id/delete", requireAuth, deleteFolder);
 
 export default folderRouter;

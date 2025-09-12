@@ -63,3 +63,28 @@ export const updateFolder = async (req, res) => {
 
   res.redirect(redirectPath);
 };
+
+export const deleteFolder = async (req, res) => {
+  const { id } = req.user;
+  const { id: folderId } = req.params;
+
+  const folder = await prisma.folder.findUnique({
+    where: { id: Number(folderId) },
+  });
+
+  if (!folder) {
+    throw new NotFoundError("Folder not found");
+  }
+
+  if (folder.userId !== id) {
+    throw new ForbiddenError(
+      "You do not have permission to delete this folder",
+    );
+  }
+
+  const redirectPath = folder.parentId ? `/folders/${folder.parentId}` : "/";
+
+  await prisma.folder.delete({ where: { id: Number(folderId) } });
+
+  res.redirect(redirectPath);
+};
