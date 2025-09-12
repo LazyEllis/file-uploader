@@ -7,6 +7,7 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import "./lib/passport.js";
 import "dotenv/config";
 import indexRouter from "./routes/indexRouter.js";
+import folderRouter from "./routes/folderRouter.js";
 
 // A second is 1000 milliseconds
 const ONE_DAY = 1000 * 60 * 60 * 24;
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/folders", folderRouter);
 app.use("/", indexRouter);
 
 // eslint-disable-next-line no-unused-vars

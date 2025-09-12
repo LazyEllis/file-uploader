@@ -1,0 +1,42 @@
+<% 
+  const action = locals.data?.id ? "Edit Folder" : "Create Folder"
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Uploader | <%= action %></title>
+  </head>
+  <body>
+    <main>
+      <h1><%= action %></h1>
+
+      <div class="form-container">
+        <%- include("partials/errors") %>
+
+        <form action="/folders/<%= locals.data?.id ? `${data.id}/edit` : 'new' %>" method="post">
+          <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" value="<%= locals.data?.name %>" />
+          </div>
+
+          <div>
+            <label for="folder">Folder</label>
+            <select name="parentId" id="folder">
+              <option value="">None</option>
+              <% folders.forEach(folder => { %>
+                <option value=<%= folder.id %> <%= locals.data?.parentId === folder.id ? "selected" : undefined %>><%= folder.name %></option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div>
+            <button type="submit" class="button action"><%= action %></button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
