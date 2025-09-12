@@ -3,13 +3,26 @@ import prisma from "./prisma.js";
 
 const validate = (validators, view, options = {}) => [
   validators,
-  (req, res, next) => {
+  async (req, res, next) => {
+    const { id } = req.params;
     const errors = validationResult(req);
+    let folders;
+
+    if (view === "folder-form" && id) {
+      folders = await prisma.folder.findMany({
+        where: { userId: Number(req.user.id), id: { not: Number(id) } },
+      });
+    } else if (view === "folder-form" || view === "file-form") {
+      folders = await prisma.folder.findMany({
+        where: { userId: Number(req.user.id) },
+      });
+    }
 
     if (!errors.isEmpty()) {
       return res.status(400).render(view, {
         ...options,
-        data: { ...req.body },
+        folders,
+        data: { ...req.body, id },
         errors: errors.array(),
       });
     }
@@ -17,6 +30,22 @@ const validate = (validators, view, options = {}) => [
     next();
   },
 ];
+
+const checkFolderExists = async (value, { req }) => {
+  const { id } = req.user;
+
+  const folder = await prisma.folder.findUnique({ where: { id: value } });
+
+  if (!folder) {
+    throw new Error("The selected folder does not exist.");
+  }
+
+  if (folder.userId !== id) {
+    throw new Error(
+      "You do not have permission to modify the selected folder.",
+    );
+  }
+};
 
 export const validateSignUp = validate(
   [
@@ -58,4 +87,32 @@ export const validateSignIn = validate(
   ],
   "auth-form",
   { mode: "sign-in" },
+);
+
+export const validateFolder = validate(
+  [
+    body("name")
+      .trim()
+      .notEmpty()
+      .withMessage("You must enter the folder's name."),
+    body("parentId")
+      .default(null)
+      .toInt()
+      .isInt()
+      .withMessage("You must select a valid folder option.")
+      .bail()
+      .custom(checkFolderExists)
+      .bail()
+      .custom(async (value, { req }) => {
+        const { id } = req.params;
+
+        const folder = await prisma.folder.findUnique({ where: { id: value } });
+
+        if (folder.id === Number(id)) {
+          throw new Error("A folder cannot be set as its own parent.");
+        }
+      })
+      .optional({ values: "null" }),
+  ],
+  "folder-form",
 );

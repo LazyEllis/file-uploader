@@ -9,6 +9,19 @@ export const renderCreateFolderForm = async (req, res) => {
   res.render("folder-form", { folders });
 };
 
+export const createFolder = async (req, res) => {
+  const { name, parentId } = req.body;
+  const { id } = req.user;
+
+  const redirectPath = parentId ? `/folders/${parentId}` : "/";
+
+  await prisma.folder.create({
+    data: { name, parentId, userId: id },
+  });
+
+  res.redirect(redirectPath);
+};
+
 export const renderUpdateFolderForm = async (req, res) => {
   const { id } = req.user;
   const { id: folderId } = req.params;
@@ -35,4 +48,18 @@ export const renderUpdateFolderForm = async (req, res) => {
     folders,
     data: folder,
   });
+};
+
+export const updateFolder = async (req, res) => {
+  const { id } = req.params;
+  const { name, parentId } = req.body;
+
+  const redirectPath = parentId ? `/folders/${parentId}` : "/";
+
+  await prisma.folder.update({
+    data: { name, parentId },
+    where: { id: Number(id) },
+  });
+
+  res.redirect(redirectPath);
 };
