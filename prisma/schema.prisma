@@ -23,8 +23,8 @@ model File {
   name      String
   url       String
   size      Int
-  owner     User     @relation(fields: [ownerId], references: [id])
-  ownerId   Int      @map("owner_id")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
   folder    Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId  Int?     @map("folder_id")
   createdAt DateTime @default(now()) @map("created_at")
@@ -35,11 +35,11 @@ model File {
 model Folder {
   id         Int      @id @default(autoincrement())
   name       String
-  owner      User     @relation(fields: [ownerId], references: [id])
-  ownerId    Int      @map("owner_id")
-  folder     Folder?  @relation("FolderToSubfolder", fields: [folderId], references: [id], onDelete: Cascade)
-  subfolders Folder[] @relation("FolderToSubfolder")
-  folderId   Int?     @map("folder_id")
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int      @map("user_id")
+  parent     Folder?  @relation("FolderToParent", fields: [parentId], references: [id], onDelete: Cascade)
+  subfolders Folder[] @relation("FolderToParent")
+  parentId   Int?     @map("parent_id")
   files      File[]
 
   @@map("folders")
