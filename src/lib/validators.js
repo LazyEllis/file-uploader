@@ -1,4 +1,8 @@
 import { body, validationResult } from "express-validator";
+import {
+  getNonSubfolders,
+  getAllSubfolders,
+} from "../generated/prisma/sql/index.js";
 import prisma from "./prisma.js";
 
 const validate = (validators, view, options = {}) => [
@@ -9,12 +13,12 @@ const validate = (validators, view, options = {}) => [
     let folders;
 
     if (view === "folder-form" && id) {
-      folders = await prisma.folder.findMany({
-        where: { userId: Number(req.user.id), id: { not: Number(id) } },
-      });
+      folders = await prisma.$queryRawTyped(
+        getNonSubfolders(Number(id), req.user.id),
+      );
     } else if (view === "folder-form" || view === "file-form") {
       folders = await prisma.folder.findMany({
-        where: { userId: Number(req.user.id) },
+        where: { userId: req.user.id },
       });
     }
 
@@ -106,10 +110,13 @@ export const validateFolder = validate(
       .custom(async (value, { req }) => {
         const { id } = req.params;
 
-        const folder = await prisma.folder.findUnique({ where: { id: value } });
+        const descendants = await prisma.$queryRawTyped(
+          getAllSubfolders(Number(id)),
+        );
 
-        if (folder.id === Number(id)) {
-          throw new Error("A folder cannot be set as its own parent.");
+        // Throws an error if the entered parent is a descendant of the folder being updated
+        if (descendants.some((descendant) => descendant.id === value)) {
+          throw new Error("A folder cannot be moved to a subfolder of itself");
         }
       })
       .optional({ values: "null" }),

@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma.js";
+import { getNonSubfolders } from "../generated/prisma/sql/index.js";
 import { ForbiddenError, NotFoundError } from "../lib/errors.js";
 
 export const renderCreateFolderForm = async (req, res) => {
@@ -40,9 +41,9 @@ export const renderUpdateFolderForm = async (req, res) => {
     );
   }
 
-  const folders = await prisma.folder.findMany({
-    where: { userId: Number(id), id: { not: Number(folderId) } },
-  });
+  const folders = await prisma.$queryRawTyped(
+    getNonSubfolders(Number(folderId), id),
+  );
 
   res.render("folder-form", {
     folders,
