@@ -2,10 +2,12 @@ import multer from "multer";
 import { Router } from "express";
 import { requireAuth } from "../lib/auth.js";
 import {
+  renameFile,
+  renderFileRenameForm,
   renderFileUploadForm,
   uploadFile,
 } from "../controllers/fileController.js";
-import { validateFileUpload } from "../lib/validators.js";
+import { validateFileRename, validateFileUpload } from "../lib/validators.js";
 
 const fileRouter = Router();
 
@@ -20,5 +22,9 @@ fileRouter.post(
   validateFileUpload,
   uploadFile,
 );
+
+fileRouter.get("/:id/edit", requireAuth, renderFileRenameForm);
+
+fileRouter.post("/:id/edit", requireAuth, validateFileRename, renameFile);
 
 export default fileRouter;

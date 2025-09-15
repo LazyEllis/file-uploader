@@ -9,6 +9,11 @@ const validate = (validators, view, options = {}) => [
   validators,
   async (req, res, next) => {
     const { id } = req.params;
+    const allowedViews = [
+      "folder-form",
+      "file-upload-form",
+      "file-rename-form",
+    ];
     const errors = validationResult(req);
     let folders;
 
@@ -16,7 +21,7 @@ const validate = (validators, view, options = {}) => [
       folders = await prisma.$queryRawTyped(
         getNonSubfolders(Number(id), req.user.id),
       );
-    } else if (view === "folder-form" || view === "file-upload-form") {
+    } else if (allowedViews.includes(view)) {
       folders = await prisma.folder.findMany({
         where: { userId: req.user.id },
       });
@@ -140,4 +145,22 @@ export const validateFileUpload = validate(
     }),
   ],
   "file-upload-form",
+);
+
+export const validateFileRename = validate(
+  [
+    body("name")
+      .trim()
+      .notEmpty()
+      .withMessage("You must enter the name of the file."),
+    body("folderId")
+      .default(null)
+      .toInt()
+      .isInt()
+      .withMessage("You must select a valid folder option.")
+      .bail()
+      .custom(checkFolderExists)
+      .optional({ values: "null" }),
+  ],
+  "file-rename-form",
 );

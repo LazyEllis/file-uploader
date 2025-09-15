@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma.js";
+import { ForbiddenError, NotFoundError } from "../lib/errors.js";
 
 export const renderFileUploadForm = async (req, res) => {
   const folders = await prisma.folder.findMany({
@@ -9,9 +10,9 @@ export const renderFileUploadForm = async (req, res) => {
 };
 
 export const uploadFile = async (req, res) => {
+  const { id } = req.user;
   const { folderId } = req.body;
   const { originalname, size, path } = req.file;
-  const { id } = req.user;
 
   await prisma.file.create({
     data: {
@@ -20,6 +21,57 @@ export const uploadFile = async (req, res) => {
       url: path,
       folderId,
       userId: id,
+    },
+  });
+
+  const redirectPath = folderId ? `/folders/${folderId}` : "/";
+
+  res.redirect(redirectPath);
+};
+
+export const renderFileRenameForm = async (req, res) => {
+  const { id } = req.user;
+  const { id: fileId } = req.params;
+
+  const file = await prisma.file.findUnique({ where: { id: Number(fileId) } });
+
+  if (!file) {
+    throw new NotFoundError("File not found");
+  }
+
+  if (file.userId !== id) {
+    throw new ForbiddenError("You do not have permission to rename this file");
+  }
+
+  const folders = await prisma.folder.findMany({
+    where: { userId: req.user.id },
+  });
+
+  res.render("file-rename-form", { folders, data: file });
+};
+
+export const renameFile = async (req, res) => {
+  const { id } = req.user;
+  const { id: fileId } = req.params;
+  const { name, folderId } = req.body;
+
+  const file = await prisma.file.findUnique({ where: { id: Number(fileId) } });
+
+  if (!file) {
+    throw new NotFoundError("File not found");
+  }
+
+  if (file.userId !== id) {
+    throw new ForbiddenError("You do not have permission to rename this file");
+  }
+
+  await prisma.file.update({
+    data: {
+      name,
+      folderId,
+    },
+    where: {
+      id: Number(fileId),
     },
   });
 

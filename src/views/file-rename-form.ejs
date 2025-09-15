@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Uploader | Rename File</title>
+  </head>
+  <body>
+    <main>
+      <h1>Rename File</h1>
+
+      <div class="form-container">
+        <%- include("partials/errors") %>
+
+        <form action="/files/<%= data.id %>/edit" method="post">
+          <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" value="<%= data.name %>">
+          </div>
+
+          <div>
+            <label for="folder">Folder</label>
+            <select name="folderId" id="folder">
+              <option value="">None</option>
+              <% folders.forEach(folder => { %>
+                <option value=<%= folder.id %> <%= locals.data?.folderId === folder.id ? "selected" : undefined %>><%= folder.name %></option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div>
+            <button type="submit" class="button action">Rename File</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
