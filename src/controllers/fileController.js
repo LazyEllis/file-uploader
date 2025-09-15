@@ -79,3 +79,19 @@ export const renameFile = async (req, res) => {
 
   res.redirect(redirectPath);
 };
+
+export const getFileDetails = async (req, res) => {
+  const file = await prisma.file.findUnique({
+    where: { id: Number(req.params.id) },
+  });
+
+  if (!file) {
+    throw new NotFoundError("File not found");
+  }
+
+  if (file.userId !== req.user.id) {
+    throw new ForbiddenError("You do not have permission to rename this file");
+  }
+
+  res.render("file", { file });
+};
