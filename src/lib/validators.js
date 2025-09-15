@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { check, body, validationResult } from "express-validator";
 import {
   getNonSubfolders,
   getAllSubfolders,
@@ -16,7 +16,7 @@ const validate = (validators, view, options = {}) => [
       folders = await prisma.$queryRawTyped(
         getNonSubfolders(Number(id), req.user.id),
       );
-    } else if (view === "folder-form" || view === "file-form") {
+    } else if (view === "folder-form" || view === "file-upload-form") {
       folders = await prisma.folder.findMany({
         where: { userId: req.user.id },
       });
@@ -122,4 +122,22 @@ export const validateFolder = validate(
       .optional({ values: "null" }),
   ],
   "folder-form",
+);
+
+export const validateFileUpload = validate(
+  [
+    body("folderId")
+      .default(null)
+      .toInt()
+      .isInt()
+      .withMessage("You must select a valid folder option.")
+      .bail()
+      .custom(checkFolderExists)
+      .optional({ values: "null" }),
+    check("file").custom((value, { req }) => {
+      if (!req.file) throw new Error("You must upload a file");
+      return true;
+    }),
+  ],
+  "file-upload-form",
 );
