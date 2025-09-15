@@ -52,15 +52,30 @@ export const renderUpdateFolderForm = async (req, res) => {
 };
 
 export const updateFolder = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.user;
+  const { id: folderId } = req.params;
   const { name, parentId } = req.body;
 
-  const redirectPath = parentId ? `/folders/${parentId}` : "/";
+  const folder = await prisma.folder.findUnique({
+    where: { id: Number(folderId) },
+  });
+
+  if (!folder) {
+    throw new NotFoundError("Folder not found");
+  }
+
+  if (folder.userId !== id) {
+    throw new ForbiddenError(
+      "You do not have permission to update this folder",
+    );
+  }
 
   await prisma.folder.update({
     data: { name, parentId },
-    where: { id: Number(id) },
+    where: { id: Number(folderId) },
   });
+
+  const redirectPath = parentId ? `/folders/${parentId}` : "/";
 
   res.redirect(redirectPath);
 };
