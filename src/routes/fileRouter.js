@@ -2,6 +2,7 @@ import multer from "multer";
 import { Router } from "express";
 import { requireAuth } from "../lib/auth.js";
 import {
+  downloadFile,
   getFileDetails,
   renameFile,
   renderFileRenameForm,
@@ -29,5 +30,7 @@ fileRouter.get("/:id", requireAuth, getFileDetails);
 fileRouter.get("/:id/edit", requireAuth, renderFileRenameForm);
 
 fileRouter.post("/:id/edit", requireAuth, validateFileRename, renameFile);
+
+fileRouter.get("/:id/download", requireAuth, downloadFile);
 
 export default fileRouter;
