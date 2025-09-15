@@ -8,6 +8,7 @@ import "./lib/passport.js";
 import "dotenv/config";
 import indexRouter from "./routes/indexRouter.js";
 import folderRouter from "./routes/folderRouter.js";
+import fileRouter from "./routes/fileRouter.js";
 
 // A second is 1000 milliseconds
 const ONE_DAY = 1000 * 60 * 60 * 24;
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/folders", folderRouter);
+app.use("/files", fileRouter);
 app.use("/", indexRouter);
 
 // eslint-disable-next-line no-unused-vars

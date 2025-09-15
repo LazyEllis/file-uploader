@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Uploader | Upload File</title>
+  </head>
+  <body>
+    <main>
+      <h1>Upload File</h1>
+
+      <div class="form-container">
+        <%- include("partials/errors") %>
+
+        <form action="/files/new" enctype="multipart/form-data" method="post">
+          <div>
+            <label for="file">File</label>
+            <input type="file" name="file" id="file">
+          </div>
+
+          <div>
+            <label for="folder">Folder</label>
+            <select name="folderId" id="folder">
+              <option value="">None</option>
+              <% folders.forEach(folder => { %>
+                <option value=<%= folder.id %> <%= locals.data?.folderId === folder.id ? "selected" : undefined %>><%= folder.name %></option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div>
+            <button type="submit" class="button action">Upload File</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
