@@ -1,6 +1,23 @@
 import prisma from "../lib/prisma.js";
 import { ForbiddenError, NotFoundError } from "../lib/errors.js";
 
+const getFileById = async (id, userId, options = {}) => {
+  const file = await prisma.file.findUnique({
+    where: { id: Number(id) },
+    ...options,
+  });
+
+  if (!file) {
+    throw new NotFoundError("File not found");
+  }
+
+  if (file.userId !== userId) {
+    throw new ForbiddenError("You do not have permission to access this file");
+  }
+
+  return file;
+};
+
 export const renderFileUploadForm = async (req, res) => {
   const folders = await prisma.folder.findMany({
     where: { userId: req.user.id },
@@ -31,39 +48,21 @@ export const uploadFile = async (req, res) => {
 
 export const renderFileRenameForm = async (req, res) => {
   const { id } = req.user;
-  const { id: fileId } = req.params;
 
-  const file = await prisma.file.findUnique({ where: { id: Number(fileId) } });
-
-  if (!file) {
-    throw new NotFoundError("File not found");
-  }
-
-  if (file.userId !== id) {
-    throw new ForbiddenError("You do not have permission to rename this file");
-  }
+  const file = await getFileById(req.params.id, id);
 
   const folders = await prisma.folder.findMany({
-    where: { userId: req.user.id },
+    where: { userId: id },
   });
 
   res.render("file-rename-form", { folders, data: file });
 };
 
 export const renameFile = async (req, res) => {
-  const { id } = req.user;
-  const { id: fileId } = req.params;
+  const { id } = req.params;
   const { name, folderId } = req.body;
 
-  const file = await prisma.file.findUnique({ where: { id: Number(fileId) } });
-
-  if (!file) {
-    throw new NotFoundError("File not found");
-  }
-
-  if (file.userId !== id) {
-    throw new ForbiddenError("You do not have permission to rename this file");
-  }
+  await getFileById(id, req.user.id);
 
   await prisma.file.update({
     data: {
@@ -71,7 +70,7 @@ export const renameFile = async (req, res) => {
       folderId,
     },
     where: {
-      id: Number(fileId),
+      id: Number(id),
     },
   });
 
@@ -81,33 +80,11 @@ export const renameFile = async (req, res) => {
 };
 
 export const getFileDetails = async (req, res) => {
-  const file = await prisma.file.findUnique({
-    where: { id: Number(req.params.id) },
-  });
-
-  if (!file) {
-    throw new NotFoundError("File not found");
-  }
-
-  if (file.userId !== req.user.id) {
-    throw new ForbiddenError("You do not have permission to rename this file");
-  }
-
+  const file = await getFileById(req.params.id, req.user.id);
   res.render("file", { file });
 };
 
 export const downloadFile = async (req, res) => {
-  const file = await prisma.file.findUnique({
-    where: { id: Number(req.params.id) },
-  });
-
-  if (!file) {
-    throw new NotFoundError("File not found");
-  }
-
-  if (file.userId !== req.user.id) {
-    throw new ForbiddenError("You do not have permission to rename this file");
-  }
-
+  const file = await getFileById(req.params.id, req.user.id);
   res.download(file.url, file.name);
 };

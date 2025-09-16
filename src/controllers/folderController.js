@@ -2,6 +2,25 @@ import prisma from "../lib/prisma.js";
 import { getNonSubfolders } from "../generated/prisma/sql/index.js";
 import { ForbiddenError, NotFoundError } from "../lib/errors.js";
 
+const getFolderById = async (id, userId, options = {}) => {
+  const folder = await prisma.folder.findUnique({
+    where: { id: Number(id) },
+    ...options,
+  });
+
+  if (!folder) {
+    throw new NotFoundError("Folder not found");
+  }
+
+  if (folder.userId !== userId) {
+    throw new ForbiddenError(
+      "You do not have permission to access this folder",
+    );
+  }
+
+  return folder;
+};
+
 export const renderCreateFolderForm = async (req, res) => {
   const folders = await prisma.folder.findMany({
     where: { userId: req.user.id },
@@ -24,25 +43,13 @@ export const createFolder = async (req, res) => {
 };
 
 export const renderUpdateFolderForm = async (req, res) => {
-  const { id } = req.user;
-  const { id: folderId } = req.params;
+  const { id: userId } = req.user;
+  const { id } = req.params;
 
-  const folder = await prisma.folder.findUnique({
-    where: { id: Number(folderId) },
-  });
-
-  if (!folder) {
-    throw new NotFoundError("Folder not found");
-  }
-
-  if (folder.userId !== id) {
-    throw new ForbiddenError(
-      "You do not have permission to update this folder",
-    );
-  }
+  const folder = await getFolderById(id, userId);
 
   const folders = await prisma.$queryRawTyped(
-    getNonSubfolders(Number(folderId), id),
+    getNonSubfolders(Number(id), userId),
   );
 
   res.render("folder-form", {
@@ -52,27 +59,14 @@ export const renderUpdateFolderForm = async (req, res) => {
 };
 
 export const updateFolder = async (req, res) => {
-  const { id } = req.user;
-  const { id: folderId } = req.params;
+  const { id } = req.params;
   const { name, parentId } = req.body;
 
-  const folder = await prisma.folder.findUnique({
-    where: { id: Number(folderId) },
-  });
-
-  if (!folder) {
-    throw new NotFoundError("Folder not found");
-  }
-
-  if (folder.userId !== id) {
-    throw new ForbiddenError(
-      "You do not have permission to update this folder",
-    );
-  }
+  await getFolderById(id, req.user.id);
 
   await prisma.folder.update({
     data: { name, parentId },
-    where: { id: Number(folderId) },
+    where: { id: Number(id) },
   });
 
   const redirectPath = parentId ? `/folders/${parentId}` : "/";
@@ -81,26 +75,15 @@ export const updateFolder = async (req, res) => {
 };
 
 export const deleteFolder = async (req, res) => {
-  const { id } = req.user;
-  const { id: folderId } = req.params;
+  const { id } = req.params;
 
-  const folder = await prisma.folder.findUnique({
-    where: { id: Number(folderId) },
+  await getFolderById(id, req.user.id);
+
+  const { parentId } = await prisma.folder.delete({
+    where: { id: Number(id) },
   });
 
-  if (!folder) {
-    throw new NotFoundError("Folder not found");
-  }
-
-  if (folder.userId !== id) {
-    throw new ForbiddenError(
-      "You do not have permission to delete this folder",
-    );
-  }
-
-  const redirectPath = folder.parentId ? `/folders/${folder.parentId}` : "/";
-
-  await prisma.folder.delete({ where: { id: Number(folderId) } });
+  const redirectPath = parentId ? `/folders/${parentId}` : "/";
 
   res.redirect(redirectPath);
 };
