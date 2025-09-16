@@ -88,3 +88,15 @@ export const downloadFile = async (req, res) => {
   const file = await getFileById(req.params.id, req.user.id);
   res.download(file.url, file.name);
 };
+
+export const deleteFile = async (req, res) => {
+  const { id } = req.params;
+
+  await getFileById(id, req.user.id);
+
+  const { folderId } = await prisma.file.delete({ where: { id } });
+
+  const redirectPath = folderId ? `/folders/${folderId}` : "/";
+
+  res.redirect(redirectPath);
+};
