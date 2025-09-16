@@ -31,7 +31,7 @@ export const uploadFile = async (req, res) => {
   const { folderId } = req.body;
   const { originalname, size, path } = req.file;
 
-  await prisma.file.create({
+  const file = await prisma.file.create({
     data: {
       name: originalname,
       size,
@@ -41,9 +41,7 @@ export const uploadFile = async (req, res) => {
     },
   });
 
-  const redirectPath = folderId ? `/folders/${folderId}` : "/";
-
-  res.redirect(redirectPath);
+  res.redirect(`/files/${file.id}`);
 };
 
 export const renderFileRenameForm = async (req, res) => {
@@ -74,9 +72,7 @@ export const renameFile = async (req, res) => {
     },
   });
 
-  const redirectPath = folderId ? `/folders/${folderId}` : "/";
-
-  res.redirect(redirectPath);
+  res.redirect(`/files/${id}`);
 };
 
 export const getFileDetails = async (req, res) => {
