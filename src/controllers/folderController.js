@@ -21,6 +21,17 @@ const getFolderById = async (id, userId, options = {}) => {
   return folder;
 };
 
+export const renderFolderPage = async (req, res) => {
+  const folder = await getFolderById(req.params.id, req.user.id, {
+    include: {
+      subfolders: true,
+      files: true,
+    },
+  });
+
+  res.render("index", { folder });
+};
+
 export const renderCreateFolderForm = async (req, res) => {
   const folders = await prisma.folder.findMany({
     where: { userId: req.user.id },

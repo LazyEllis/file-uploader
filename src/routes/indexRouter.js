@@ -3,6 +3,7 @@ import passport from "passport";
 import { requireAuth, requireGuest } from "../lib/auth.js";
 import { validateSignIn, validateSignUp } from "../lib/validators.js";
 import {
+  renderLandingPage,
   renderSignInForm,
   renderSignUpForm,
   signOut,
@@ -10,6 +11,8 @@ import {
 } from "../controllers/indexController.js";
 
 const indexRouter = Router();
+
+indexRouter.get("/", requireAuth, renderLandingPage);
 
 indexRouter.get("/sign-up", requireGuest, renderSignUpForm);
 

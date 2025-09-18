@@ -1,6 +1,21 @@
 import bcrypt from "bcryptjs";
 import prisma from "../lib/prisma.js";
 
+export const renderLandingPage = async (req, res) => {
+  const { id } = req.user;
+
+  const [subfolders, files] = await Promise.all([
+    prisma.folder.findMany({
+      where: { userId: id, parentId: null },
+    }),
+    prisma.file.findMany({
+      where: { userId: id, folderId: null },
+    }),
+  ]);
+
+  res.render("index", { folder: { subfolders, files } });
+};
+
 export const renderSignUpForm = (req, res) => {
   res.render("auth-form", { mode: "sign-up" });
 };
