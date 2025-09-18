@@ -23,6 +23,15 @@
         <dd><%= file.createdAt %></dd>
       </div>
 
+      <% if (file.folder) { %>
+        <div>
+          <dt>Folder</dt>
+          <dd>
+            <a href="/folders/<%= file.folder.id %>"><%= file.folder.name %></a>
+          </dd>
+        </div>
+      <% } %>
+
       <div>
         <dt>Actions</dt>
         <dd>

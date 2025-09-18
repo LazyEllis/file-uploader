@@ -76,7 +76,12 @@ export const renameFile = async (req, res) => {
 };
 
 export const getFileDetails = async (req, res) => {
-  const file = await getFileById(req.params.id, req.user.id);
+  const file = await getFileById(req.params.id, req.user.id, {
+    include: {
+      folder: true,
+    },
+  });
+
   res.render("file", { file });
 };
 
