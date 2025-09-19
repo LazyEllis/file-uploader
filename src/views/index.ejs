@@ -4,34 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>File Uploader | <%= folder.name ?? "My Drive" %></title>
+  <%- include("partials/styles") %>
 </head>
 <body>
-  <h1><%= folder.name ?? "My Drive" %></h1>
+  <main>
+    <h1><%= folder.name ?? "My Drive" %></h1>
 
-  <% if (folder.subfolders.length > 0) { %> 
-    <section>
-      <h2>Folders</h2>
-      <div>
-        <% folder.subfolders.forEach((subfolder) => { %>
-          <div>
-            <a href="/folders/<%= subfolder.id %>"><%= subfolder.name %></a>
-          </div>
-        <% }) %>
-      </div>
-    </section>
-  <% } %> 
-
-  <% if (folder.files.length > 0) { %> 
-    <section>
-      <h2>Files</h2>
-      <div>
-        <% folder.files.forEach((file) => { %>
-          <div>
-            <a href="/files/<%= file.id %>"><%= file.name %></a>
-          </div>
-        <% }) %>
-      </div>
-    </section>
-  <% } %> 
+    <% if (folder.subfolders.length > 0) { %>
+      <section>
+        <h2>Folders</h2>
+        <div>
+          <% folder.subfolders.forEach((subfolder) => { %>
+            <div>
+              <a href="/folders/<%= subfolder.id %>"><%= subfolder.name %></a>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+    <% } %>
+    
+    <% if (folder.files.length > 0) { %>
+      <section>
+        <h2>Files</h2>
+        <div>
+          <% folder.files.forEach((file) => { %>
+            <div>
+              <a href="/files/<%= file.id %>"><%= file.name %></a>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+    <% } %>
+  </main>
 </body>
 </html>

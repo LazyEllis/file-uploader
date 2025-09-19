@@ -4,43 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>File Uploader | <%= file.name %></title>
+    <%- include("partials/styles") %>
   </head>
   <body>
-    <h1>File Details</h1>
-    <dl>
-      <div>
-        <dt>File Name</dt>
-        <dd><%= file.name %></dd>
-      </div>
-
-      <div>
-        <dt>Size</dt>
-        <dd><%= file.size %></dd>
-      </div>
-
-      <div>
-        <dt>Upload Time</dt>
-        <dd><%= file.createdAt %></dd>
-      </div>
-
-      <% if (file.folder) { %>
+    <main>
+      <h1>File Details</h1>
+      <dl>
         <div>
-          <dt>Folder</dt>
+          <dt>File Name</dt>
+          <dd><%= file.name %></dd>
+        </div>
+
+        <div>
+          <dt>Size</dt>
+          <dd><%= file.size %></dd>
+        </div>
+
+        <div>
+          <dt>Upload Time</dt>
+          <dd><%= file.createdAt %></dd>
+        </div>
+
+        <% if (file.folder) { %>
+          <div>
+            <dt>Folder</dt>
+            <dd>
+              <a href="/folders/<%= file.folder.id %>"><%= file.folder.name %></a>
+            </dd>
+          </div>
+        <% } %>
+        
+        <div>
+          <dt>Actions</dt>
           <dd>
-            <a href="/folders/<%= file.folder.id %>"><%= file.folder.name %></a>
+            <ul>
+              <li><a href="/files/<%= file.id %>/download">Download</a></li>
+              <li><a href="/files/<%= file.id %>/edit">Rename</a></li>
+            </ul>
           </dd>
         </div>
-      <% } %>
-
-      <div>
-        <dt>Actions</dt>
-        <dd>
-          <ul>
-            <li><a href="/files/<%= file.id %>/download">Download</a></li>
-            <li><a href="/files/<%= file.id %>/edit">Rename</a></li>
-          </ul>
-        </dd>
-      </div>
-    </dl>
+      </dl>
+    </main>
   </body>
 </html>

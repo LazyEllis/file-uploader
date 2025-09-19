@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "Roboto";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/roboto-v49-latin-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/roboto-v49-latin-700.woff2") format("woff2");
+}
+
+body {
+  font-family: "Roboto", Arial, sans-serif;
+}
