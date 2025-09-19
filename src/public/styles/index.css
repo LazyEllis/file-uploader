@@ -1,0 +1,54 @@
+.item-heading {
+  margin-bottom: 8px;
+}
+
+section:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.item-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.button-group {
+  display: flex;
+
+  > .button {
+    flex: 1;
+
+    &:first-child {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    &.dropdown-toggle {
+      padding: 0 4px;
+      flex-grow: 0;
+    }
+  }
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+}
+
+.button {
+  padding: 12px;
+  background-color: var(--color-item);
+
+  &:hover {
+    background-color: var(--color-item-hover);
+  }
+}
+
+.item-link {
+  display: flex;
+  gap: 12px;
+}
