@@ -1,0 +1,44 @@
+.item-heading {
+  margin-bottom: 8px;
+}
+
+section:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.item-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
+}
+
+.button-group {
+  display: flex;
+
+  &:has(.dropdown-menu.open) .button:not(.dropdown-menu .button) {
+    background-color: var(--color-accent);
+  }
+
+  .dropdown-toggle {
+    height: 100%;
+  }
+
+  .button:not(.dropdown-menu .button) {
+    border-radius: 0;
+
+    &:is(.button-group > .button) {
+      flex: 1;
+
+      &:first-child {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+      }
+    }
+
+    &:last-child,
+    &.dropdown-toggle {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+  }
+}

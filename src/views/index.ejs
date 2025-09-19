@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>File Uploader | <%= folder.name ?? "My Drive" %></title>
-  <%- include("partials/styles") %>
+  <%- include("partials/styles", { style: "index" }) %>
 </head>
 <body>
   <main>
@@ -12,27 +12,121 @@
 
     <% if (folder.subfolders.length > 0) { %>
       <section>
-        <h2>Folders</h2>
-        <div>
+        <h2 class="item-heading">Folders</h2>
+        <ul class="item-grid">
           <% folder.subfolders.forEach((subfolder) => { %>
-            <div>
-              <a href="/folders/<%= subfolder.id %>"><%= subfolder.name %></a>
-            </div>
+            <li class="button-group">
+              <a href="/folders/<%= subfolder.id %>" class="button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-folder-icon lucide-folder"
+                >
+                  <path
+                    d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
+                  />
+                </svg>
+                <%= subfolder.name %>
+              </a>
+              <div class="dropdown">
+                <button class="button dropdown-toggle">
+                  <span class="sr-only">Open <%= subfolder.name %> options</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical"
+                  >
+                    <circle cx="12" cy="12" r="1" />
+                    <circle cx="12" cy="5" r="1" />
+                    <circle cx="12" cy="19" r="1" />
+                  </svg>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a href="/folders/<%= subfolder.id %>/edit" class="button">Rename</a></li>
+                  <li>
+                    <form action="/folders/<%= subfolder.id %>/delete" method="post">
+                      <button type="submit" class="button">Delete</button>
+                    </form>
+                  </li>
+                </ul>
+              </div>
+            </li>
           <% }) %>
-        </div>
+          </ul>
       </section>
     <% } %>
     
     <% if (folder.files.length > 0) { %>
       <section>
-        <h2>Files</h2>
-        <div>
+        <h2 class="item-heading">Files</h2>
+        <ul class="item-grid">
           <% folder.files.forEach((file) => { %>
-            <div>
-              <a href="/files/<%= file.id %>"><%= file.name %></a>
-            </div>
+            <li class="button-group">
+              <a href="/files/<%= file.id %>" class="button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-file-icon lucide-file"
+                >
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                </svg>
+                <%= file.name %>
+              </a>
+              <div class="dropdown">
+                <button class="button dropdown-toggle">
+                  <span class="sr-only">Open <%= file.name %> options</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical"
+                  >
+                    <circle cx="12" cy="12" r="1" />
+                    <circle cx="12" cy="5" r="1" />
+                    <circle cx="12" cy="19" r="1" />
+                  </svg>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a href="/files/<%= file.id %>/download" class="button">Download</a></li>
+                  <li><a href="/files/<%= file.id %>/edit" class="button">Rename</a></li>
+                  <li>
+                    <form action="/files/<%= file.id %>/delete" method="post">
+                      <button type="submit" class="button">Delete</button>
+                    </form>
+                  </li>
+                </ul>
+              </div>
+            </li>
           <% }) %>
-        </div>
+        </ul>
       </section>
     <% } %>
   </main>
