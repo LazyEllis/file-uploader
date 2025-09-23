@@ -1,0 +1,52 @@
+:root {
+  --color-border: #444746;
+  --color-danger: #601410;
+  --color-danger-hover: #8f1f1a;
+}
+
+main {
+  padding-inline: 0;
+}
+
+h1 {
+  padding-inline: 20px;
+}
+
+dl > div {
+  padding: 14px 20px;
+  border-top: 1px solid var(--color-border);
+
+  dt {
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+}
+
+.actions {
+  @media (width >= 40rem) {
+    display: flex;
+    gap: 10px;
+
+    > li {
+      flex: 1;
+      margin-bottom: 0;
+    }
+  }
+
+  > li:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .button {
+    text-align: center;
+    width: 100%;
+
+    &.danger {
+      background-color: var(--color-danger);
+
+      &:hover {
+        background-color: var(--color-danger-hover);
+      }
+    }
+  }
+}

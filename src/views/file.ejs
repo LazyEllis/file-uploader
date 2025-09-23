@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>File Uploader | <%= file.name %></title>
-    <%- include("partials/styles") %>
+    <%- include("partials/styles", { style: "file" }) %>
   </head>
   <body>
     <main>
@@ -37,9 +37,14 @@
         <div>
           <dt>Actions</dt>
           <dd>
-            <ul>
-              <li><a href="/files/<%= file.id %>/download">Download</a></li>
-              <li><a href="/files/<%= file.id %>/edit">Rename</a></li>
+            <ul class="actions">
+              <li><a href="/files/<%= file.id %>/download" class="button">Download</a></li>
+              <li><a href="/files/<%= file.id %>/edit" class="button">Rename</a></li>
+              <li>
+                <form action="/files/<%= file.id %>/delete" method="post">
+                  <button type="submit" class="button danger">Delete</button>
+                </form>
+              </li>
             </ul>
           </dd>
         </div>
