@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>File Uploader | Rename File</title>
-    <%- include("partials/styles") %>
+    <%- include("partials/styles", { style: "form" }) %>
   </head>
   <body>
     <main>
@@ -29,8 +29,9 @@
             </select>
           </div>
 
-          <div>
-            <button type="submit" class="button action">Rename File</button>
+          <div class="actions">
+            <a href="/files/<%= data.id %>" class="button">Cancel</a>
+            <button type="submit" class="button success">Rename File</button>
           </div>
         </form>
       </div>
