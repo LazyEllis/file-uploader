@@ -10,6 +10,7 @@
     <%- include("partials/navbar") %>
     <main>
       <header class="page-heading">
+        <%- include("partials/breadcrumb", { data: file, identifier: "folder" }) %>
         <div class="heading-container">
           <h1>File Details</h1>
           <div class="dropdown">
@@ -58,15 +59,6 @@
           <dt>Upload Time</dt>
           <dd><%= file.createdAt %></dd>
         </div>
-
-        <% if (file.folder) { %>
-          <div>
-            <dt>Folder</dt>
-            <dd>
-              <a href="/folders/<%= file.folder.id %>" class="link-text"><%= file.folder.name %></a>
-            </dd>
-          </div>
-        <% } %>
       </dl>
     </main>
   </body>

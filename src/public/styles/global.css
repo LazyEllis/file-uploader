@@ -119,8 +119,40 @@ h2 {
 .page-heading {
   margin-bottom: 20px;
 
+  nav {
+    margin-bottom: 6px;
+  }
+
   h1 {
     margin: 0;
+  }
+}
+
+.breadcrumb-list,
+.breadcrumb-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.breadcrumb-list li {
+  --color-breadcrumb: var(--color-breadcrumb, var(--color-text));
+
+  a {
+    color: var(--color-breadcrumb);
+
+    &:hover {
+      color: var(--color-text);
+    }
+  }
+
+  &:not(:last-child) a {
+    --color-breadcrumb: #c4c7c5;
+  }
+
+  svg {
+    height: 20px;
+    width: 20px;
   }
 }
 
