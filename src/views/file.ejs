@@ -9,7 +9,40 @@
   <body>
     <%- include("partials/navbar") %>
     <main>
-      <h1>File Details</h1>
+      <header class="page-heading">
+        <div class="heading-container">
+          <h1>File Details</h1>
+          <div class="dropdown">
+            <button class="button dropdown-toggle">
+              Actions
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-down-icon lucide-chevron-down"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="/files/<%= file.id %>/download" class="button">Download</a></li>
+              <li><a href="/files/<%= file.id %>/edit" class="button">Rename</a></li>
+              <li>
+                <form action="/files/<%= file.id %>/delete" method="post">
+                  <button type="submit" class="button">Delete</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+
       <dl>
         <div>
           <dt>File Name</dt>
@@ -34,21 +67,6 @@
             </dd>
           </div>
         <% } %>
-        
-        <div>
-          <dt>Actions</dt>
-          <dd>
-            <ul class="actions">
-              <li><a href="/files/<%= file.id %>/download" class="button">Download</a></li>
-              <li><a href="/files/<%= file.id %>/edit" class="button">Rename</a></li>
-              <li>
-                <form action="/files/<%= file.id %>/delete" method="post">
-                  <button type="submit" class="button danger">Delete</button>
-                </form>
-              </li>
-            </ul>
-          </dd>
-        </div>
       </dl>
     </main>
   </body>

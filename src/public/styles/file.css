@@ -7,7 +7,7 @@ main {
   padding-inline: 0;
 }
 
-h1 {
+.page-heading {
   padding-inline: 20px;
 }
 
@@ -18,34 +18,5 @@ dl > div {
   dt {
     font-weight: 700;
     margin-bottom: 4px;
-  }
-}
-
-.actions {
-  @media (width >= 40rem) {
-    display: flex;
-    gap: 10px;
-
-    > li {
-      flex: 1;
-      margin-bottom: 0;
-    }
-  }
-
-  > li:not(:last-child) {
-    margin-bottom: 10px;
-  }
-
-  .button {
-    text-align: center;
-    width: 100%;
-
-    &.danger {
-      background-color: var(--color-danger);
-
-      &:hover {
-        background-color: var(--color-danger-hover);
-      }
-    }
   }
 }
