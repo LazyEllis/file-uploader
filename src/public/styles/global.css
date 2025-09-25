@@ -116,6 +116,14 @@ h2 {
   position: relative;
 }
 
+.page-heading {
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+  }
+}
+
 .mobile-menu,
 .dropdown-menu {
   display: none;

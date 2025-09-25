@@ -26,6 +26,7 @@ export const renderFolderPage = async (req, res) => {
     include: {
       subfolders: true,
       files: true,
+      parent: true,
     },
   });
 
