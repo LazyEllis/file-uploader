@@ -1,0 +1,73 @@
+<header>
+  <nav class="nav-global">
+    <div class="navbar">
+      <a href="/" class="brand">File Uploader</a>
+      <ul class="nav-list">
+        <% if (user) { %>
+          <li class="dropdown">
+            <button class="button icon dropdown-toggle">
+              <span class="sr-only">Open user menu</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-circle-user-icon lucide-circle-user"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+              </svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li class="menu-item">
+                <div class="small">Signed in as</div>
+                <div><%= user.username %></div>
+              </li>
+              <li><a href="/sign-out" class="button">Sign out</a></li>
+            </ul>
+          </li>
+        <% } else { %>
+          <li><a href="/sign-in" class="button">Sign in</a></li>
+          <li><a href="/sign-up" class="button success">Sign up</a></li>
+        <% } %>
+      </ul>
+      <button class="button icon" id="mobile-menu-button">
+        <span class="sr-only">Open navigation menu</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-menu-icon lucide-menu"
+        >
+          <path d="M4 5h16" />
+          <path d="M4 12h16" />
+          <path d="M4 19h16" />
+        </svg>
+      </button>
+    </div>
+    <ul class="mobile-menu" id="mobile-menu">
+        <% if (user) { %>
+          <li class="menu-item">
+            <div class="small">Signed in as</div>
+            <div><%= user.username %></div>
+          </li>
+          <li><a href="/sign-out" class="button">Sign out</a></li>
+        <% } else { %>
+          <li><a href="/sign-in" class="button">Sign in</a></li>
+          <li><a href="/sign-up" class="button success">Sign up</a></li>
+        <% } %>
+    </ul>
+  </nav>
+</header>

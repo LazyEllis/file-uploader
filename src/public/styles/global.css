@@ -17,15 +17,16 @@
 :root {
   /* Colors */
   --color-base: #131314;
-  --color-nav: #1b1b1b;
-  --color-text: #e3e3e3;
   --color-item: #1e1f20;
   --color-item-hover: #2e2f2f;
+  --color-text: #e3e3e3;
   --color-accent: #004a77;
   --color-accent-hover: #0f5682;
+  --color-border: #444746;
   --color-link: #2b7cff;
 
   /* Font Sizes */
+  --font-sm: 0.875rem;
   --font-base: 1rem;
   --font-lg: 1.25rem;
   --font-xl: 1.5rem;
@@ -33,6 +34,7 @@
   /* Border Radius */
   --rounded-md: 0.75rem;
   --rounded-sm: 0.25rem;
+  --rounded-full: calc(infinity * 1px);
 
   /* Box Shadow */
   --dropdown-shadow:
@@ -72,6 +74,22 @@ h2 {
   border-width: 0;
 }
 
+.small {
+  font-size: var(--font-sm);
+}
+
+.brand {
+  font-size: var(--font-xl);
+}
+
+.link-text {
+  color: var(--color-link);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .button {
   background-color: var(--color-item);
   border-radius: var(--rounded-md);
@@ -87,12 +105,18 @@ h2 {
     display: flex;
     gap: 10px;
   }
+
+  &.icon {
+    padding: 8px;
+    border-radius: var(--rounded-full);
+  }
 }
 
 .dropdown {
   position: relative;
 }
 
+.mobile-menu,
 .dropdown-menu {
   display: none;
 
@@ -111,6 +135,12 @@ h2 {
   right: 0;
   z-index: 1;
 
+  .menu-item {
+    padding-block: 4px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 4px;
+  }
+
   .button {
     border-radius: 0;
     padding-block: 4px;
@@ -119,10 +149,51 @@ h2 {
   }
 }
 
-.link-text {
-  color: var(--color-link);
+.nav-global {
+  background-color: var(--color-item);
+  z-index: 2;
 
-  &:hover {
-    text-decoration: underline;
+  &:has(.mobile-menu.open) {
+    position: absolute;
+    inset: 0;
+
+    @media (width >= 40rem) {
+      position: static;
+    }
   }
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 20px;
+  height: 64px;
+}
+
+.nav-list {
+  display: none;
+
+  @media (width >= 40rem) {
+    display: flex;
+    gap: 16px;
+  }
+}
+
+#mobile-menu-button {
+  @media (width >= 40rem) {
+    display: none;
+  }
+}
+
+.mobile-menu {
+  padding: 8px 8px 12px;
+
+  li:not(:last-child) {
+    margin-bottom: 8px;
+  }
+}
+
+.menu-item > div {
+  padding-inline: 12px;
 }

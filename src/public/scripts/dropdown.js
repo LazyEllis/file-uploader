@@ -1,4 +1,8 @@
+const mobileMenuButton = document.querySelector("#mobile-menu-button");
+const mobileMenu = document.querySelector("#mobile-menu");
 const dropdownToggles = document.querySelectorAll(".dropdown-toggle");
+
+const toggleMobileMenu = () => mobileMenu.classList.toggle("open");
 
 const toggleDropdown = (e) => {
   const dropdownMenu = e.currentTarget.nextElementSibling;
@@ -15,6 +19,8 @@ const closeDropdown = (e) => {
     dropdownMenu.classList.remove("open");
   });
 };
+
+mobileMenuButton.addEventListener("click", toggleMobileMenu);
 
 dropdownToggles.forEach((toggle) =>
   toggle.addEventListener("click", toggleDropdown),
