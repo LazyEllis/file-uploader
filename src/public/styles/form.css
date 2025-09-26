@@ -5,11 +5,21 @@
   --font-sm: 0.875rem;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 main {
   max-width: 712px;
   margin-inline: auto;
 
   &.auth {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    justify-content: center;
+
     @media (width >= 40rem) {
       max-width: 425px;
     }
