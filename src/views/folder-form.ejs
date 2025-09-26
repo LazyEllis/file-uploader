@@ -1,5 +1,5 @@
 <% 
-  const action = locals.data?.id ? "Edit Folder" : "Create Folder"
+  const action = locals.data?.id ? "Rename Folder" : "Create Folder"
 %>
 
 <!DOCTYPE html>
@@ -18,7 +18,7 @@
       <div class="form-container">
         <%- include("partials/errors") %>
 
-        <form action="/folders/<%= locals.data?.id ? `${data.id}/edit` : 'new' %>" method="post">
+        <form action="/folders/<%= locals.data?.id ? `${data.id}/rename` : 'new' %>" method="post">
           <div>
             <label for="name">Name</label>
             <input type="text" name="name" id="name" value="<%= locals.data?.name %>" />

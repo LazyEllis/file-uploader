@@ -54,7 +54,7 @@ export const createFolder = async (req, res) => {
   res.redirect(redirectPath);
 };
 
-export const renderUpdateFolderForm = async (req, res) => {
+export const renderFolderRenameForm = async (req, res) => {
   const { id: userId } = req.user;
   const { id } = req.params;
 
@@ -70,7 +70,7 @@ export const renderUpdateFolderForm = async (req, res) => {
   });
 };
 
-export const updateFolder = async (req, res) => {
+export const renameFolder = async (req, res) => {
   const { id } = req.params;
   const { name, parentId } = req.body;
 

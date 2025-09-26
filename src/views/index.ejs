@@ -35,7 +35,7 @@
             <li><a href="/files/new" class="button">Upload File</a></li>
             <li class="divider"><a href="/folders/new" class="button">New Folder</a></li>
             <% if (folder.id) { %>
-              <li><a href="/folders/<%= folder.id %>/edit" class="button">Rename</a></li>
+              <li><a href="/folders/<%= folder.id %>/rename" class="button">Rename</a></li>
               <li>
                 <form action="/folders/<%= folder.id %>/delete" method="post">
                   <button type="submit" class="button">Delete</button>
@@ -93,7 +93,7 @@
                   </svg>
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a href="/folders/<%= subfolder.id %>/edit" class="button">Rename</a></li>
+                  <li><a href="/folders/<%= subfolder.id %>/rename" class="button">Rename</a></li>
                   <li>
                     <form action="/folders/<%= subfolder.id %>/delete" method="post">
                       <button type="submit" class="button">Delete</button>
@@ -153,7 +153,7 @@
                 </button>
                 <ul class="dropdown-menu">
                   <li><a href="/files/<%= file.id %>/download" class="button">Download</a></li>
-                  <li><a href="/files/<%= file.id %>/edit" class="button">Rename</a></li>
+                  <li><a href="/files/<%= file.id %>/rename" class="button">Rename</a></li>
                   <li>
                     <form action="/files/<%= file.id %>/delete" method="post">
                       <button type="submit" class="button">Delete</button>

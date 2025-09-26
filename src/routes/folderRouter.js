@@ -6,8 +6,8 @@ import {
   deleteFolder,
   renderCreateFolderForm,
   renderFolderPage,
-  renderUpdateFolderForm,
-  updateFolder,
+  renderFolderRenameForm,
+  renameFolder,
 } from "../controllers/folderController.js";
 
 const folderRouter = Router();
@@ -18,9 +18,9 @@ folderRouter.post("/new", requireAuth, validateFolder, createFolder);
 
 folderRouter.get("/:id", requireAuth, renderFolderPage);
 
-folderRouter.get("/:id/edit", requireAuth, renderUpdateFolderForm);
+folderRouter.get("/:id/rename", requireAuth, renderFolderRenameForm);
 
-folderRouter.post("/:id/edit", requireAuth, validateFolder, updateFolder);
+folderRouter.post("/:id/rename", requireAuth, validateFolder, renameFolder);
 
 folderRouter.post("/:id/delete", requireAuth, deleteFolder);
 
