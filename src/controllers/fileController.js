@@ -95,7 +95,7 @@ export const deleteFile = async (req, res) => {
 
   await getFileById(id, req.user.id);
 
-  const { folderId } = await prisma.file.delete({ where: { id } });
+  const { folderId } = await prisma.file.delete({ where: { id: Number(id) } });
 
   const redirectPath = folderId ? `/folders/${folderId}` : "/";
 
