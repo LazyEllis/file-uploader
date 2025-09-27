@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma.js";
+import formatFileSize from "../lib/formatFileSize.js";
 import { ForbiddenError, NotFoundError } from "../lib/errors.js";
 import { format } from "date-fns";
 
@@ -83,7 +84,7 @@ export const getFileDetails = async (req, res) => {
     },
   });
 
-  res.render("file", { file, format });
+  res.render("file", { file, format, formatFileSize });
 };
 
 export const downloadFile = async (req, res) => {
