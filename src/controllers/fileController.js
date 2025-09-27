@@ -1,5 +1,6 @@
 import prisma from "../lib/prisma.js";
 import { ForbiddenError, NotFoundError } from "../lib/errors.js";
+import { format } from "date-fns";
 
 const getFileById = async (id, userId, options = {}) => {
   const file = await prisma.file.findUnique({
@@ -82,7 +83,7 @@ export const getFileDetails = async (req, res) => {
     },
   });
 
-  res.render("file", { file });
+  res.render("file", { file, format });
 };
 
 export const downloadFile = async (req, res) => {
