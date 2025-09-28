@@ -5,6 +5,8 @@ import {
 } from "../generated/prisma/sql/index.js";
 import prisma from "./prisma.js";
 
+const TEN_MEGABYTES = 10 * 1024 * 1024;
+
 const validate = (validators, view, options = {}) => [
   validators,
   async (req, res, next) => {
@@ -139,10 +141,12 @@ export const validateFileUpload = validate(
       .bail()
       .custom(checkFolderExists)
       .optional({ values: "null" }),
-    check("file").custom((value, { req }) => {
-      if (!req.file) throw new Error("You must upload a file");
-      return true;
-    }),
+    check("file")
+      .custom((value, { req }) => req.file)
+      .withMessage("You must upload a file.")
+      .bail()
+      .custom((value, { req }) => req.file.size <= TEN_MEGABYTES)
+      .withMessage("Uploaded files must not exceed 10 MB."),
   ],
   "file-upload-form",
 );
