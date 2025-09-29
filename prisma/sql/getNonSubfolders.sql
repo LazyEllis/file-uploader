@@ -1,19 +1,19 @@
+WITH RECURSIVE subfolders AS (
+  SELECT
+    id
+  FROM
+    folders
+  WHERE
+    id = 1
+  UNION
+  SELECT
+    folders.id
+  FROM
+    folders
+    JOIN subfolders ON subfolders.id = folders.parent_id
+)
 SELECT * FROM folders
   WHERE id NOT IN (
-    WITH RECURSIVE subfolders AS (
-      SELECT
-        id
-      FROM
-        folders
-      WHERE
-        id = $1
-      UNION
-      SELECT
-        folders.id
-      FROM
-        folders
-        JOIN subfolders ON subfolders.id = folders.parent_id
-    )
     SELECT * FROM subfolders
   )
-  AND user_id = $2;
+  AND user_id = 1;
