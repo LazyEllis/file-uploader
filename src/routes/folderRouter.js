@@ -18,9 +18,9 @@ folderRouter.post("/new", requireAuth, validateFolder, createFolder);
 
 folderRouter.get("/:id", requireAuth, renderFolderPage);
 
-folderRouter.get("/:id/rename", requireAuth, renderFolderRenameForm);
+folderRouter.get("/:id/edit", requireAuth, renderFolderRenameForm);
 
-folderRouter.post("/:id/rename", requireAuth, validateFolder, renameFolder);
+folderRouter.post("/:id/edit", requireAuth, validateFolder, renameFolder);
 
 folderRouter.post("/:id/delete", requireAuth, deleteFolder);
 
