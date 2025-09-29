@@ -3,6 +3,7 @@ import passport from "passport";
 import { requireAuth, requireGuest } from "../lib/auth.js";
 import { validateSignIn, validateSignUp } from "../lib/validators.js";
 import {
+  render404Page,
   renderLandingPage,
   renderSignInForm,
   renderSignUpForm,
@@ -32,5 +33,7 @@ indexRouter.post(
 );
 
 indexRouter.get("/sign-out", requireAuth, signOut);
+
+indexRouter.get("/*splat", render404Page);
 
 export default indexRouter;

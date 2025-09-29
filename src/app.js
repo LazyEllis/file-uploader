@@ -52,7 +52,10 @@ app.use("/", indexRouter);
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.statusCode || 500).send(err.message);
+  res.status(Number(err.statusCode) || 500).render("error", {
+    message: err.statusCode ? err.message : "Something went wrong",
+    statusCode: err.statusCode || 500,
+  });
 });
 
 const PORT = process.env.PORT || 3000;

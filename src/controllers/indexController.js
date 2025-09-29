@@ -58,3 +58,9 @@ export const signOut = (req, res, next) => {
     res.redirect("/sign-in");
   });
 };
+
+export const render404Page = (req, res) => {
+  res
+    .status(404)
+    .render("error", { message: "Page Not Found", statusCode: 404 });
+};

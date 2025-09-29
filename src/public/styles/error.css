@@ -1,0 +1,33 @@
+html,
+body {
+  height: 100%;
+}
+
+main {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.error {
+  text-align: center;
+
+  .code,
+  .message {
+    font-weight: 700;
+  }
+
+  .code {
+    color: var(--color-link);
+  }
+
+  .message {
+    font-size: 3rem;
+    margin-top: 16px;
+    margin-bottom: 40px;
+  }
+
+  .button:hover {
+    background-color: var(--color-accent);
+  }
+}
