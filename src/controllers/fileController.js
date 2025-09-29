@@ -1,5 +1,7 @@
+import crypto from "crypto";
 import prisma from "../lib/prisma.js";
 import formatFileSize from "../lib/formatFileSize.js";
+import supabase from "../lib/supabase.js";
 import { ForbiddenError, NotFoundError } from "../lib/errors.js";
 import { format } from "date-fns";
 
@@ -31,13 +33,23 @@ export const renderFileUploadForm = async (req, res) => {
 export const uploadFile = async (req, res) => {
   const { id } = req.user;
   const { folderId } = req.body;
-  const { originalname, size, path } = req.file;
+  const { originalname, size, buffer } = req.file;
+
+  const uniqueName = crypto.randomBytes(16).toString("hex");
+
+  const { data, error } = await supabase.storage
+    .from("files")
+    .upload(uniqueName, buffer);
+
+  if (error) {
+    throw error;
+  }
 
   const file = await prisma.file.create({
     data: {
       name: originalname,
       size,
-      url: path,
+      url: data.path,
       folderId,
       userId: id,
     },
@@ -85,11 +97,6 @@ export const getFileDetails = async (req, res) => {
   });
 
   res.render("file", { file, format, formatFileSize });
-};
-
-export const downloadFile = async (req, res) => {
-  const file = await getFileById(req.params.id, req.user.id);
-  res.download(file.url, file.name);
 };
 
 export const deleteFile = async (req, res) => {

@@ -3,7 +3,6 @@ import { Router } from "express";
 import { requireAuth } from "../lib/auth.js";
 import {
   deleteFile,
-  downloadFile,
   getFileDetails,
   renameFile,
   renderFileRenameForm,
@@ -14,7 +13,7 @@ import { validateFileRename, validateFileUpload } from "../lib/validators.js";
 
 const fileRouter = Router();
 
-const upload = multer({ dest: "./uploads" });
+const upload = multer({ storage: multer.memoryStorage() });
 
 fileRouter.get("/new", requireAuth, renderFileUploadForm);
 
@@ -31,8 +30,6 @@ fileRouter.get("/:id", requireAuth, getFileDetails);
 fileRouter.get("/:id/edit", requireAuth, renderFileRenameForm);
 
 fileRouter.post("/:id/edit", requireAuth, validateFileRename, renameFile);
-
-fileRouter.get("/:id/download", requireAuth, downloadFile);
 
 fileRouter.post("/:id/delete", requireAuth, deleteFile);
 

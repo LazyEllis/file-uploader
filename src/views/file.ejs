@@ -32,7 +32,7 @@
               </svg>
             </button>
             <ul class="dropdown-menu">
-              <li><a href="/files/<%= file.id %>/download" class="button">Download</a></li>
+              <li><a href="<%= process.env.SUPABASE_DOWNLOAD_URL_PREFIX %>/<%= file.url %>?download=<%= file.name %>" class="button">Download</a></li>
               <li><a href="/files/<%= file.id %>/edit" class="button">Rename</a></li>
               <li>
                 <form action="/files/<%= file.id %>/delete" method="post">
