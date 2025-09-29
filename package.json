@@ -1,5 +1,5 @@
 {
-  "name": "express-template",
+  "name": "file-uploader",
   "type": "module",
   "version": "1.0.0",
   "description": "",
@@ -9,19 +9,20 @@
     "dev": "node --watch src/app.js",
     "test": "vitest",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "postinstall": "prisma migrate deploy && prisma generate --sql"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LazyEllis/express-template.git"
+    "url": "git+https://github.com/LazyEllis/file-uploader.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/LazyEllis/express-template/issues"
+    "url": "https://github.com/LazyEllis/file-uploader/issues"
   },
-  "homepage": "https://github.com/LazyEllis/express-template#readme",
+  "homepage": "https://github.com/LazyEllis/file-uploader#readme",
   "dependencies": {
     "@prisma/client": "^6.15.0",
     "@quixo3/prisma-session-store": "^3.1.13",
