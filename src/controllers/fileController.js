@@ -102,9 +102,17 @@ export const getFileDetails = async (req, res) => {
 export const deleteFile = async (req, res) => {
   const { id } = req.params;
 
-  await getFileById(id, req.user.id);
+  const { url, folderId } = await getFileById(id, req.user.id);
 
-  const { folderId } = await prisma.file.delete({ where: { id: Number(id) } });
+  await prisma.$transaction(async (tx) => {
+    await tx.file.delete({ where: { id: Number(id) } });
+
+    const { error } = await supabase.storage.from("files").remove([url]);
+
+    if (error) {
+      throw error;
+    }
+  });
 
   const redirectPath = folderId ? `/folders/${folderId}` : "/";
 

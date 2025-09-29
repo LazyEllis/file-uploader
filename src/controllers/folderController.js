@@ -1,5 +1,9 @@
 import prisma from "../lib/prisma.js";
-import { getNonSubfolders } from "../generated/prisma/sql/index.js";
+import supabase from "../lib/supabase.js";
+import {
+  getNonSubfolders,
+  getNestedFiles,
+} from "../generated/prisma/sql/index.js";
 import { ForbiddenError, NotFoundError } from "../lib/errors.js";
 
 const getFolderById = async (id, userId, options = {}) => {
@@ -89,10 +93,26 @@ export const renameFolder = async (req, res) => {
 export const deleteFolder = async (req, res) => {
   const { id } = req.params;
 
-  await getFolderById(id, req.user.id);
+  const { parentId } = await getFolderById(id, req.user.id);
 
-  const { parentId } = await prisma.folder.delete({
-    where: { id: Number(id) },
+  await prisma.$transaction(async (tx) => {
+    const nestedFiles = await tx.$queryRawTyped(getNestedFiles(Number(id)));
+
+    await tx.folder.delete({
+      where: { id: Number(id) },
+    });
+
+    if (nestedFiles.length > 0) {
+      const nestedFileUrls = nestedFiles.map((file) => file.url);
+
+      const { error } = await supabase.storage
+        .from("files")
+        .remove(nestedFileUrls);
+
+      if (error) {
+        throw error;
+      }
+    }
   });
 
   const redirectPath = parentId ? `/folders/${parentId}` : "/";
