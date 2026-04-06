@@ -5,12 +5,12 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
+    "build": "prisma migrate deploy && prisma generate --sql",
     "start": "node src/app.js",
     "dev": "node --watch src/app.js",
     "test": "vitest",
     "lint": "eslint .",
-    "format": "prettier --write .",
-    "postinstall": "prisma migrate deploy && prisma generate --sql"
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
